@@ -6,7 +6,7 @@
 // TODO: Титульный лист
 
 #pagebreak()
-= Задание на курсовой проект
+#heading(numbering: none)[Задание на курсовой проект]
 
 #pagebreak()
 #ch[ВВЕДЕНИЕ]
