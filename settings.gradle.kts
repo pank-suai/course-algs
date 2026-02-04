@@ -43,3 +43,4 @@ plugins {
 
 include(":docs")
 include(":app")
+include(":core")
