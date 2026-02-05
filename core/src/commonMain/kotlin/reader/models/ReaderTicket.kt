@@ -1,6 +1,7 @@
 package reader.models
 
 import kotlin.jvm.JvmInline
+import kotlin.math.abs
 
 
 /**
@@ -25,7 +26,7 @@ value class ReaderTicket(private val value: String) {
     val year: Int
         get() = 2000 + value.substring(6, 8).toInt()
 
-    fun hash(): Int = value.hashCode()
+    fun hash(): Int = abs(value.hashCode())
 
 }
 
@@ -45,3 +46,5 @@ enum class AccessType(val char: Char) {
         }
     }
 }
+
+fun String.toReaderTicket(): ReaderTicket = ReaderTicket(this)

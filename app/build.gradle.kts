@@ -24,6 +24,10 @@ kotlin{
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.preview)
+
+            implementation(projects.core)
+
+            implementation("io.github.koalaplot:koalaplot-core:0.11.0")
         }
 
         jvmMain.dependencies{
