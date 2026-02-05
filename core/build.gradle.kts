@@ -9,4 +9,10 @@ plugins {
 kotlin{
     jvm()
     wasmJs()
+
+    sourceSets{
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+    }
 }
