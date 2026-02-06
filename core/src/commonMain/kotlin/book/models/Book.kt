@@ -1,5 +1,7 @@
 package book.models
 
+import utils.currentYear
+
 /**
  * Данные о книге
  *
@@ -19,10 +21,10 @@ data class Book(
     val yearOfPublishing: Int,
     val totalCopies: Int,
     val availableCopies: Int,
-): Comparable<Book>{
+) : Comparable<Book> {
 
     init {
-        require(yearOfPublishing in 1450..2130) // существование книг до 1450 года крайне сомнительно, а 2130 - это уже слишком далеко в будущем
+        require(yearOfPublishing in 1450..currentYear()) // существование книг до 1450 года крайне сомнительно
         require(totalCopies >= 0)
         require(availableCopies in 0..totalCopies)
     }

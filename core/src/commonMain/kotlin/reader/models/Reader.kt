@@ -1,5 +1,7 @@
 package reader.models
 
+import utils.currentYear
+
 /**
  * Данные о читателе
  *
@@ -10,6 +12,6 @@ package reader.models
  */
 data class Reader(val fullName: String, val yearOfBirthday: Int, val address: String, val placeOfWork: String){
     init{
-        require(yearOfBirthday in 1870..2130) // можно заменить на проверку с текущим годом, но это излишне усложнит этот data class
+        require(yearOfBirthday in 1870..currentYear())
     }
 }

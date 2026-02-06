@@ -11,6 +11,10 @@ kotlin{
     wasmJs()
 
     sourceSets{
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
+
+        }
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
