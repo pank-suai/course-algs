@@ -4,7 +4,7 @@ kotlin = "2.3.0"
 typst = "0.8.0"
 kotlinx-coroutines = "1.10.2"
 material3 = "1.10.0-alpha05"
-
+materialKolor = "5.0.0-alpha06"
 
 [libraries]
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
@@ -14,6 +14,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+materialKolor = "com.materialkolor:material-kolor:5.0.0-alpha06"
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform"}

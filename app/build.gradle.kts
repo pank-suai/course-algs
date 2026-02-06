@@ -10,6 +10,11 @@ plugins{
 kotlin{
     jvm()
 
+    js {
+        browser()
+        binaries.executable()
+    }
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
@@ -28,6 +33,8 @@ kotlin{
             implementation(projects.core)
 
             implementation("io.github.koalaplot:koalaplot-core:0.11.0")
+
+            implementation(libs.materialKolor)
         }
 
         jvmMain.dependencies{
