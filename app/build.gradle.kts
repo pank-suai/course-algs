@@ -5,6 +5,7 @@ plugins{
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin{
@@ -35,6 +36,19 @@ kotlin{
             implementation("io.github.koalaplot:koalaplot-core:0.11.0")
 
             implementation(libs.materialKolor)
+
+
+            implementation(libs.navigation3.ui)
+            implementation(libs.compose.material3.adaptive.navigation3)
+            implementation(libs.kotlinx.serialization.core)
+
+            implementation(libs.compose.material3.adaptive)
+            implementation(libs.compose.material3.adaptive.layout)
+
+            implementation(libs.compose.material3.adaptive.navigation.suite)
+
+            implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.9.6")
+
         }
 
         jvmMain.dependencies{
