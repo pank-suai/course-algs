@@ -40,8 +40,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: 'build/wasm/yarn.lock'
 
       - name: Run core tests
         run: ./gradlew :core:allTests --no-daemon --stacktrace
@@ -81,8 +79,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: 'build/wasm/yarn.lock'
 
       - name: Build Wasm application
         run: ./gradlew :app:wasmJsBrowserDistribution --no-daemon --stacktrace
