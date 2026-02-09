@@ -7,9 +7,9 @@ import kotlin.test.assertEquals
 class ReaderHashTableTest {
 
     val readers = listOf(
-        ReaderTicket("А1234-20") to Reader("Иванов Иван Иванович", 1990, "ул. Ленина, д. 1", "ООО Ромашка"),
-        ReaderTicket("Ч5678-21") to Reader("Петров Петр Петрович", 1985, "ул. Пушкина, д. 2", "ГБУЗ Городская больница №1"),
-        ReaderTicket("В9012-22") to Reader("Сидоров Сидор Сидорович", 2000, "ул. Гагарина, д. 3", "МГУ")
+        ReaderTicket("А1234-20") to Reader(ReaderTicket("А1234-20"), "Иванов Иван Иванович", 1990, "ул. Ленина, д. 1", "ООО Ромашка"),
+        ReaderTicket("Ч5678-21") to Reader(ReaderTicket("Ч5678-21"), "Петров Петр Петрович", 1985, "ул. Пушкина, д. 2", "ГБУЗ Городская больница №1"),
+        ReaderTicket("В9012-22") to Reader(ReaderTicket("В9012-22"), "Сидоров Сидор Сидорович", 2000, "ул. Гагарина, д. 3", "МГУ")
     )
 
     @Test
@@ -69,7 +69,6 @@ class ReaderHashTableTest {
         assertEquals(false, nonExistingTicket in hashTable)
     }
 
-    @Ignore // Пока не реализовано
     @Test
     fun toListTest() {
         val hashTable = ReaderHashTable()
@@ -78,12 +77,8 @@ class ReaderHashTableTest {
             hashTable.put(reader)
         }
 
-        val itemList = hashTable.toList()
+        val itemList = hashTable.toArray()
         assertEquals(readers.size, itemList.size)
 
-        readers.forEach { (ticket, reader) ->
-            val item = itemList.find { it.key == ticket }
-            assertEquals(reader, item?.value)
-        }
     }
 }

@@ -11,10 +11,10 @@ import kotlin.math.abs
  * YY - год выдачи (последние две цифры года)
  */
 @JvmInline
-value class ReaderTicket(private val value: String) {
+value class ReaderTicket(val value: String) {
     init {
         // ANNNN-YY
-        require("[АЧВ]\\d{4}-\\d{2}".toRegex().matches(value))
+        require(validateTicket(value))
     }
 
     val accessType: AccessType
@@ -27,6 +27,13 @@ value class ReaderTicket(private val value: String) {
         get() = 2000 + value.substring(6, 8).toInt()
 
     fun hash(): Int = abs(value.hashCode())
+
+    companion object{
+        /**
+         * Проверка формата читательского билета
+         */
+        fun validateTicket(value: String): Boolean = "[АЧВ]\\d{4}-\\d{2}".toRegex().matches(value)
+    }
 
 }
 

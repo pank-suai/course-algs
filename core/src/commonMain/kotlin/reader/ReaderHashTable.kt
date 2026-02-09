@@ -52,5 +52,15 @@ class ReaderHashTable(val capacity: Int = 300)  // для простоты не 
     operator fun contains(readerTicket: ReaderTicket): Boolean = findByTicket(readerTicket) != null
 
 
-    fun toList(): List<Item> = TODO() // Перевод в список для интерфейса
+    fun toArray(): Array<Reader> {
+        var result = arrayOf<Reader>()
+        table.forEach { bucket ->
+            bucket.forEach { item ->
+                result += item.value
+
+            }
+        }
+        return result
+    }
+
 }
