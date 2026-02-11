@@ -97,4 +97,106 @@ class LoanSkipList() {
         }
         return result
     }
+
+    /**
+     * Найти активную выдачу (без даты возврата) по шифру книги и номеру читательского билета
+     */
+    fun findActiveLoan(bookCipher: BookCipher, readerTicket: ReaderTicket): Loan? {
+        var curr = head
+        while (curr != null) {
+            if (curr.loan.bookCipher == bookCipher && 
+                curr.loan.readerTicket == readerTicket && 
+                curr.loan.returnDate == null) {
+                return curr.loan
+            }
+            curr = curr.next
+        }
+        return null
+    }
+
+    /**
+     * Найти все активные выдачи по шифру книги (без даты возврата)
+     */
+    fun findActiveByBookCipher(bookCipher: BookCipher): Array<Loan> {
+        return findByBookCipher(bookCipher).filter { it.returnDate == null }.toTypedArray()
+    }
+
+    /**
+     * Найти все активные выдачи по номеру читательского билета (без даты возврата)
+     */
+    fun findActiveByReaderTicket(readerTicket: ReaderTicket): Array<Loan> {
+        return findByReaderTicket(readerTicket).filter { it.returnDate == null }.toTypedArray()
+    }
+
+    /**
+     * Удалить запись о выдаче
+     */
+    fun remove(loan: Loan): Boolean {
+        if (head == null) return false
+
+        // Если удаляем голову
+        if (head!!.loan == loan) {
+            head = head!!.next
+            updateBookGroup()
+            updateReaderRecord()
+            return true
+        }
+
+        var curr = head
+        while (curr?.next != null) {
+            if (curr.next!!.loan == loan) {
+                curr.next = curr.next!!.next
+                updateBookGroup()
+                updateReaderRecord()
+                return true
+            }
+            curr = curr.next
+        }
+        return false
+    }
+
+    /**
+     * Заменить запись о выдаче (для обновления даты возврата)
+     */
+    fun update(oldLoan: Loan, newLoan: Loan): Boolean {
+        if (remove(oldLoan)) {
+            insert(newLoan)
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Преобразовать список в массив
+     */
+    fun toArray(): Array<Loan> {
+        val result = mutableListOf<Loan>()
+        var curr = head
+        while (curr != null) {
+            result.add(curr.loan)
+            curr = curr.next
+        }
+        return result.toTypedArray()
+    }
+
+    /**
+     * Очистить список
+     */
+    fun clear() {
+        head = null
+    }
+
+    /**
+     * Проверить наличие активных выдач для читателя
+     */
+    fun hasActiveLoansForReader(readerTicket: ReaderTicket): Boolean {
+        return findActiveByReaderTicket(readerTicket).isNotEmpty()
+    }
+
+    /**
+     * Проверить наличие активных выдач для книги
+     */
+    fun hasActiveLoansForBook(bookCipher: BookCipher): Boolean {
+        return findActiveByBookCipher(bookCipher).isNotEmpty()
+    }
 }

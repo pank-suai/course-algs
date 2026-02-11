@@ -2,6 +2,8 @@ package ui.screen.readers.upsert
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -9,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
@@ -58,17 +61,33 @@ fun UpsertReader(modifier: Modifier = Modifier, selectedReaderTicket: String? = 
             label = { Text("Место работы") }
         )
 
+        // Информация о выданных книгах
+        if (!isAdding && viewModel.activeLoansCount > 0) {
+            Spacer(Modifier.height(8.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    "Выдано книг: ${viewModel.activeLoansCount}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier
+                )
+            }
+        }
+
         Text(
             viewModel.errorMessage ?: "",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.error
         )
-        // TODO: info about books
+
         Row {
             Button(
                 onClick = {
-                    viewModel.removeReader()
-                    onUpsertReader()
+                    val removed = viewModel.removeReader()
+                    if (removed) onUpsertReader()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,

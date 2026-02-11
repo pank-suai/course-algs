@@ -7,8 +7,18 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 value class BookCipher(val value: String): Comparable<BookCipher> {
+    
+    companion object {
+        private val CIPHER_REGEX = "\\d{3}\\.\\d{3}".toRegex()
+        
+        /**
+         * Проверка валидности шифра
+         */
+        fun validate(value: String): Boolean = CIPHER_REGEX.matches(value)
+    }
+    
     init {
-        require("\\d{3}\\.\\d{3}".toRegex().matches(value))
+        require(validate(value))
     }
 
     /**

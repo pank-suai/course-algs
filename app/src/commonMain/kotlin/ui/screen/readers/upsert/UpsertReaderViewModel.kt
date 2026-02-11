@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import data.loans.LoansRepository
+import data.loans.LoansRepositorySingleton
 import data.readers.ReadersRepository
 import data.readers.ReadersRepositorySingleton
 import reader.models.Reader
@@ -11,7 +13,8 @@ import reader.models.ReaderTicket
 
 class UpsertReaderViewModel(
     selectedReaderTicket: String? = null, // Если null, то это добавление нового читателя, иначе - редактирование существующего
-    private val readersRepository: ReadersRepository = ReadersRepositorySingleton.readersRepository
+    private val readersRepository: ReadersRepository = ReadersRepositorySingleton.readersRepository,
+    private val loansRepository: LoansRepository = LoansRepositorySingleton.loansRepository
 ) :
     ViewModel() {
 
@@ -23,6 +26,11 @@ class UpsertReaderViewModel(
     var address: String by mutableStateOf("")
     var placeOfWork: String by mutableStateOf("")
 
+    // Информация о выданных книгах
+    val activeLoansCount: Int
+        get() = if (ReaderTicket.validateTicket(readerTicket)) {
+            loansRepository.getActiveByReaderTicket(ReaderTicket(readerTicket)).size
+        } else 0
 
     init {
         if (selectedReaderTicket != null) {
@@ -76,12 +84,22 @@ class UpsertReaderViewModel(
         return true
     }
 
-    fun removeReader() {
+    fun removeReader(): Boolean {
         if (!ReaderTicket.validateTicket(readerTicket)) {
             errorMessage = "Невозможно удалить читателя с некорректным номером билета"
-            return
+            return false
         }
-        readersRepository.removeReader(ReaderTicket(readerTicket))
+        
+        // Проверка наличия невозвращенных книг
+        val ticket = ReaderTicket(readerTicket)
+        if (loansRepository.hasActiveLoansForReader(ticket)) {
+            val activeLoans = loansRepository.getActiveByReaderTicket(ticket)
+            errorMessage = "Невозможно снять читателя с обслуживания: у него ${activeLoans.size} невозвращенных книг"
+            return false
+        }
+        
+        readersRepository.removeReader(ticket)
+        return true
     }
 
 }

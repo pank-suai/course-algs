@@ -22,6 +22,11 @@ interface ReadersRepository {
     fun getReaderByTicket(readerTicket: ReaderTicket): Reader?
 
     /**
+     * Поиск читателей по фрагменту ФИО (с использованием алгоритма Бойера-Мура)
+     */
+    fun searchByFullName(fullNameFragment: String): List<Reader>
+
+    /**
      * Добавить или изменить
      */
     fun upsertReader(reader: Reader)

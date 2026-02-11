@@ -2,7 +2,7 @@ package reader
 
 import reader.models.Reader
 import reader.models.ReaderTicket
-
+import utils.BoyerMoore
 
 
 data class Item(val key: ReaderTicket, var value: Reader) {
@@ -41,7 +41,25 @@ class ReaderHashTable(val capacity: Int = 300)  // для простоты не 
         bucket.deleteFirstBy { it.key == ticket }
     }
 
-    fun findByFullName(fullName: String): List<Item> = TODO()
+    /**
+     * Поиск читателей по фрагменту ФИО с использованием алгоритма Бойера-Мура
+     * 
+     * @param fullNameFragment фрагмент ФИО для поиска
+     * @return список найденных читателей
+     */
+    fun findByFullName(fullNameFragment: String): List<Reader> {
+        if (fullNameFragment.isBlank()) return toArray().toList()
+        
+        val result = mutableListOf<Reader>()
+        table.forEach { bucket ->
+            bucket.forEach { item ->
+                if (BoyerMoore.contains(item.value.fullName, fullNameFragment)) {
+                    result.add(item.value)
+                }
+            }
+        }
+        return result
+    }
 
     fun findByTicket(readerTicket: ReaderTicket): Reader? {
         val index = hash(readerTicket)
