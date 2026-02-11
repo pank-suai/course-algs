@@ -34,5 +34,7 @@ interface ReadersRepository {
 
     fun removeReader(readerTicket: ReaderTicket)
 
+    fun clear()
+
 
 }

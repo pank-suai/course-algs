@@ -76,4 +76,10 @@ class LinearLinkedList<T> {
             current = current.next
         }
     }
+
+    fun clear(){
+        // Слава Garbage Collector
+        _first = null
+        _size = 0
+    }
 }

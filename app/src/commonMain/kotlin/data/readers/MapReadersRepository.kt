@@ -33,6 +33,12 @@ class MapReadersRepository: ReadersRepository {
         updateReaderList()
     }
 
+    override fun clear() {
+        readersHashTable.clear()
+        readerList.value = readersHashTable.toArray()
+
+    }
+
     private fun updateReaderList() {
         readerList.value = readersHashTable.toArray()
     }

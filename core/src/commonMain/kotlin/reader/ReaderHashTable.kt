@@ -63,4 +63,8 @@ class ReaderHashTable(val capacity: Int = 300)  // для простоты не 
         return result
     }
 
+    fun clear() {
+        table.forEach { it.clear() }
+    }
+
 }

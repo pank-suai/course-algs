@@ -13,6 +13,7 @@ import androidx.navigation3.ui.NavDisplay
 import ui.icons.person
 import ui.icons.personFilled
 import ui.screen.readers.ReadersScreen
+import ui.screen.settings.SettingsScreen
 
 sealed interface MainNavItem {
     val icon: ImageVector
@@ -24,9 +25,16 @@ sealed interface MainNavItem {
         override val filledIcon: ImageVector = personFilled
         override val label: String = "Читатели"
     }
+
+    // TODO: change icon
+    object Settings: MainNavItem{
+        override val icon = person
+        override val filledIcon = personFilled
+        override val label = "Настройки"
+    }
 }
 
-val MAIN_NAV_ITEMS = listOf<MainNavItem>(MainNavItem.Readers)
+val MAIN_NAV_ITEMS = listOf<MainNavItem>(MainNavItem.Readers, MainNavItem.Settings)
 
 @Composable
 fun MainNav() {
@@ -54,6 +62,9 @@ fun MainNav() {
         }, entryProvider = entryProvider {
             entry<MainNavItem.Readers>{
                 ReadersScreen()
+            }
+            entry<MainNavItem.Settings> {
+                SettingsScreen()
             }
         })
     }
