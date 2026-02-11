@@ -1,10 +1,8 @@
 package ui.screen.readers.upsert
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -22,7 +20,7 @@ fun UpsertReader(modifier: Modifier = Modifier, selectedReaderTicket: String? = 
         derivedStateOf { selectedReaderTicket == null }
     }
 
-    val viewModel = viewModel {
+    val viewModel = viewModel(key = selectedReaderTicket) {
         UpsertReaderViewModel(selectedReaderTicket)
     }
 
@@ -65,11 +63,26 @@ fun UpsertReader(modifier: Modifier = Modifier, selectedReaderTicket: String? = 
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.error
         )
-        Button(onClick = {
-            val isUpserted = viewModel.addReader()
-            if (isUpserted) onUpsertReader()
-        }) {
-            Text(if (isAdding) "Добавить читателя" else "Обновить читателя")
+        // TODO: info about books
+        Row {
+            Button(
+                onClick = {
+                    viewModel.removeReader()
+                    onUpsertReader()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
+            ) {
+                Text("Снять с обслуживания")
+            }
+            Button(onClick = {
+                val isUpserted = viewModel.addReader()
+                if (isUpserted) onUpsertReader()
+            }) {
+                Text(if (isAdding) "Добавить читателя" else "Обновить читателя")
+            }
         }
 
     }

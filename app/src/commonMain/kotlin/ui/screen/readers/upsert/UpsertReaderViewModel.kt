@@ -76,4 +76,12 @@ class UpsertReaderViewModel(
         return true
     }
 
+    fun removeReader() {
+        if (!ReaderTicket.validateTicket(readerTicket)) {
+            errorMessage = "Невозможно удалить читателя с некорректным номером билета"
+            return
+        }
+        readersRepository.removeReader(ReaderTicket(readerTicket))
+    }
+
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.composables.add
+import ui.icons.close
 import ui.icons.search
 import ui.screen.readers.upsert.UpsertReader
 import ui.theme.AppTheme
@@ -127,6 +128,7 @@ fun ReadersScreen() {
                 state = rememberTooltipState(),
             ) {
                 FloatingActionButton(onClick = {
+                    selectedReaderTicket = null
                     isDialogVisible = true
                 }) {
                     Icon(add, "Добавить читателя")
@@ -152,7 +154,6 @@ fun ReadersScreen() {
     AnimatedVisibility(isDialogVisible) {
         Dialog(onDismissRequest = {
             isDialogVisible = false
-            selectedReaderTicket = null
         }) {
             Surface(shape = MaterialTheme.shapes.large, tonalElevation = 6.dp) {
                 UpsertReader(Modifier.padding(10.dp), selectedReaderTicket) {
@@ -174,9 +175,12 @@ fun ReaderItem(
 ) {
     ElevatedCard(onClick = onClick, modifier) {
         Column(modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)) {
-            Row {
-                Text(fullName, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(
+                    fullName, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f).basicMarquee()
+                )
             }
             Spacer(Modifier.height(4.dp))
 

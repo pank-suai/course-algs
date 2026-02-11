@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.composables.settings
+import com.composables.settingsFilled
 import ui.icons.person
 import ui.icons.personFilled
 import ui.screen.readers.ReadersScreen
@@ -28,8 +30,8 @@ sealed interface MainNavItem {
 
     // TODO: change icon
     object Settings: MainNavItem{
-        override val icon = person
-        override val filledIcon = personFilled
+        override val icon = settings
+        override val filledIcon = settingsFilled
         override val label = "Настройки"
     }
 }
