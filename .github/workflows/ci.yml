@@ -83,6 +83,17 @@ jobs:
       - name: Build Wasm application
         run: ./gradlew :app:wasmJsBrowserDistribution --no-daemon --stacktrace
 
+      - name: Install Typst
+        uses: typst-community/setup-typst@v4
+        with:
+          typst-version: 'v0.14.2'
+
+      - name: Build docs (HTML)
+        run: typst compile --format html docs/index.typ docs/index.html
+
+      - name: Copy docs HTML to deployment directory
+        run: cp docs/index.html app/build/dist/wasmJs/productionExecutable/pz.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
