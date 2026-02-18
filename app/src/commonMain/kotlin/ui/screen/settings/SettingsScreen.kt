@@ -4,18 +4,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun SettingsScreen() {
 
+    val uriHandler = LocalUriHandler.current
+
     val viewModel = viewModel { SettingsViewModel() }
     
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("Тестовые данные", style = MaterialTheme.typography.titleMedium)
         
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = viewModel::fillReadersData) {
                 Text("Читатели")
             }
@@ -31,7 +34,7 @@ fun SettingsScreen() {
         
         Text("Очистка данных", style = MaterialTheme.typography.titleMedium)
         
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(
                 onClick = viewModel::clearReadersData, 
                 colors = ButtonDefaults.buttonColors(
@@ -68,6 +71,11 @@ fun SettingsScreen() {
             ) {
                 Text("Все данные")
             }
+        }
+        Button(onClick = {
+            uriHandler.openUri("https://pank-suai.github.io/course-algs/pz.html")
+        }){
+            Text("Пояснительная записка")
         }
     }
 }
