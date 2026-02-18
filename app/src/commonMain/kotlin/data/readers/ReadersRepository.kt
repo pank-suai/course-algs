@@ -24,7 +24,7 @@ interface ReadersRepository {
     /**
      * Поиск читателей по фрагменту ФИО (с использованием алгоритма Бойера-Мура)
      */
-    fun searchByFullName(fullNameFragment: String): List<Reader>
+    fun searchByFullName(fullNameFragment: String): Array<Reader>
 
     /**
      * Добавить или изменить

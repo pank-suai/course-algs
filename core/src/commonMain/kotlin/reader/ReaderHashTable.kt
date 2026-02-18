@@ -47,14 +47,14 @@ class ReaderHashTable(val capacity: Int = 300)  // для простоты не 
      * @param fullNameFragment фрагмент ФИО для поиска
      * @return список найденных читателей
      */
-    fun findByFullName(fullNameFragment: String): List<Reader> {
-        if (fullNameFragment.isBlank()) return toArray().toList()
+    fun findByFullName(fullNameFragment: String): Array<Reader> {
+        if (fullNameFragment.isBlank()) return toArray()
         
-        val result = mutableListOf<Reader>()
+        var result = arrayOf<Reader>()
         table.forEach { bucket ->
             bucket.forEach { item ->
                 if (BoyerMoore.contains(item.value.fullName, fullNameFragment)) {
-                    result.add(item.value)
+                    result += item.value
                 }
             }
         }

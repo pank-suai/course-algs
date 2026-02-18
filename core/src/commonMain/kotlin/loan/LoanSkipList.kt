@@ -170,13 +170,13 @@ class LoanSkipList() {
      * Преобразовать список в массив
      */
     fun toArray(): Array<Loan> {
-        val result = mutableListOf<Loan>()
+        var result = arrayOf<Loan>()
         var curr = head
         while (curr != null) {
-            result.add(curr.loan)
+            result += curr.loan
             curr = curr.next
         }
-        return result.toTypedArray()
+        return result
     }
 
     /**

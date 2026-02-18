@@ -36,7 +36,7 @@ class ReadersViewModel(private val mapReadersRepository: ReadersRepository = Rea
             } ?: arrayOf()
 
 
-            SearchBy.FullName -> readers
+            SearchBy.FullName -> mapReadersRepository.searchByFullName(query)
             else -> readers
         }
 

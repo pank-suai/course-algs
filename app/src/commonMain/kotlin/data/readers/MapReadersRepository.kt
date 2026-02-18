@@ -21,7 +21,7 @@ class MapReadersRepository: ReadersRepository {
 
     override fun getReaderByTicket(readerTicket: ReaderTicket): Reader? = readersHashTable.findByTicket(readerTicket)
 
-    override fun searchByFullName(fullNameFragment: String): List<Reader> = 
+    override fun searchByFullName(fullNameFragment: String): Array<Reader> =
         readersHashTable.findByFullName(fullNameFragment)
 
     override fun upsertReader(reader: Reader) {
