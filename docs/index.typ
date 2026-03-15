@@ -1,9 +1,9 @@
+#page(background: image("titlepage.pdf"), margin: (0cm))[]
+
 #import "lib/gost.typ": *
 
 #show: init
 
-
-// TODO: Титульный лист
 
 #heading(numbering: none)[Задание на курсовой проект]
 
