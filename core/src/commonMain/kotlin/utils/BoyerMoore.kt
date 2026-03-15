@@ -8,14 +8,13 @@ package utils
 object BoyerMoore {
     
     /**
-     * Построение таблицы сдвигов по плохому символу (bad character rule)
+     * Построение таблицы сдвигов по плохому символу
      */
     private fun buildBadCharTable(pattern: String): Map<Char, Int> {
         val table = mutableMapOf<Char, Int>()
-        val m = pattern.length
-        
-        for (i in 0 until m - 1) {
-            table[pattern[i].lowercaseChar()] = m - 1 - i
+
+        for (i in 0 until pattern.lastIndex) {
+            table[pattern[i].lowercaseChar()] = pattern.lastIndex - i
         }
         
         return table

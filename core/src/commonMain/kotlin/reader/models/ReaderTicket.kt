@@ -26,9 +26,19 @@ value class ReaderTicket(val value: String) {
     val year: Int
         get() = 2000 + value.substring(6, 8).toInt()
 
-    fun hash(): Int = abs(value.hashCode())
+    /**
+     * Биноминальное хеширование
+     */
+    fun hash(): Int {
+        val p = 43
+        var hash = 0
+        for (char in value) {
+            hash += hash * p + char.code
+        }
+        return abs(hash) // В случае переполнения или опр. символа, может быть отрицательнм
+    }
 
-    companion object{
+    companion object {
         /**
          * Проверка формата читательского билета
          */
