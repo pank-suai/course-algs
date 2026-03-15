@@ -8,6 +8,10 @@
     "chrome-devtools": {
       "type": "local",
       "command": ["npx", "-y", "chrome-devtools-mcp@latest", "--autoConnect"]
+    },
+    "excalidraw":{
+      "type": "remote",
+      "url": "https://mcp.excalidraw.com"
     }
   }
 }

@@ -8,7 +8,7 @@
 #heading(numbering: none)[Задание на курсовой проект]
 
 
-В соответстсвии с методическими указаниями для выполнения данной курсовой работы, вариант задания определяется на основе последних трёх цифр студенческого билета. Мои последние цифры студенческого билета: 624. На основе этих цифр получил следующий вариант задания:
+В соответствии с методическими указаниями для выполнения данной курсовой работы, вариант задания определяется на основе последних трёх цифр студенческого билета. Мои последние цифры студенческого билета: 624. На основе этих цифр получил следующий вариант задания:
 
 - предметная область: "Обслуживание читателей в библиотеке" ($624 mod 6 = 0$); 
 - метод хеширования: открытое ($624 mod 4 = 0$);
@@ -45,7 +45,7 @@
 Примечание: длина строк (кроме номера читательского билета)
 определяется студентом самостоятельно.
 
-3. Данные о читателях должны быть организованны в видехеш-таблицы, первичным ключом которой является «номер читательского билета». Метод хеширования определяется вариантом задания.
+3. Данные о читателях должны быть организованы в виде хеш-таблицы, первичным ключом которой является «номер читательского билета». Метод хеширования определяется вариантом задания.
 
 4. Данные о каждой книге должны содержать:
 
@@ -65,7 +65,7 @@
 
 Примечание: длина строк (кроме Шифра) определяется студентом самостоятельно.
 
-5. Данные о книгах должны быть организованны в виде АВЛ-дерева поиска, упорядоченного по "Шифру".
+5. Данные о книгах должны быть организованы в виде АВЛ-дерева поиска, упорядоченного по "Шифру".
 
 6. Данные о выдаче или приеме книг от читателей должны содержать:
 – Номер читательского билета – строка, формат которой соответствует аналогичной строке в данных о читателях;
@@ -83,7 +83,7 @@
 
 2. Одному читателю может быть выдано несколько книг, и экземпляры одной книги могут быть выданы нескольким читателям. Таким образом, могут быть данные, имеющие повторяющиеся значения в своих полях.
 
-7. Данные о выдаче или приеме книг от читателей должны быть организованны в виде списка, который упорядочен по первичному ключу – «Шифр». Вид списка и метод сортировки определяются вариантом задания.
+7. Данные о выдаче или приеме книг от читателей должны быть организованы в виде списка, который упорядочен по первичному ключу – «Шифр». Вид списка и метод сортировки определяются вариантом задания.
 
 8. Информационная система «Обслуживание читателей в библиотеке» должна осуществлять:
 
@@ -247,6 +247,31 @@
 
 Временная сложность алгоритма составляет $O(n/m)$ в среднем случае и $O(n dot m)$ в наихудшем случае, однако на практике алгоритм работает значительно быстрее наивного поиска за счёт больших сдвигов при несовпадении.
 
+=== Сравнение методов поиска читателя по ФИО
+
+Согласно заданию, метод поиска читателя по ФИО определяется студентом самостоятельно и должен быть сопоставлен с альтернативами. В данной работе поиск читателя по фрагменту ФИО реализован следующим образом: выполняется полный перебор всех ячеек хеш-таблицы, и для каждого читателя проверяется вхождение заданного фрагмента в поле ФИО с помощью алгоритма Бойера-Мура. Такой подход обусловлен тем, что хеш-таблица индексирована по номеру читательского билета, а не по ФИО, поэтому прямой доступ по имени невозможен.
+
+Для сравнения рассмотрены четыре альтернативных метода поиска подстроки, которые могли бы использоваться вместо алгоритма Бойера-Мура при переборе хеш-таблицы. Результаты сравнения приведены в таблице @search_comparison.
+
+#figure(
+  caption: "Сравнение методов поиска подстроки для поиска читателя по ФИО",
+  kind: table,
+  long-table(
+    columns: (1.5fr, 1fr, 1fr, 2.5fr),
+    align: (left, left, left, left),
+    table.header([Метод], [Среднее], [Худшее], [Особенности]),
+
+    [Наивный поиск], [$O(n dot m)$], [$O(n dot m)$], [Прост в реализации, не требует предварительной обработки. Неэффективен при длинных образцах.],
+    [Алгоритм Бойера-Мура], [$O(n\/m)$], [$O(n dot m)$], [Сравнение справа налево позволяет пропускать большие фрагменты текста. На практике -- самый быстрый для естественных текстов.],
+    [Алгоритм Кнута-Морриса-Пратта (КМП)], [$O(n + m)$], [$O(n + m)$], [Гарантированная линейная сложность. Требует построения префикс-функции ($O(m)$). Менее эффективен на практике, чем Бойера-Мура.],
+    [Алгоритм Рабина-Карпа], [$O(n + m)$], [$O(n dot m)$], [Использует хеширование подстрок. Эффективен при множественном поиске. Возможны ложные совпадения хешей.],
+  )
+) <search_comparison>
+
+Где $n$ -- длина строки ФИО, $m$ -- длина искомого фрагмента. Общая сложность поиска по всей хеш-таблице составляет $O(N dot T)$, где $N$ -- количество читателей, $T$ -- сложность проверки одной записи выбранным методом.
+
+Алгоритм Бойера-Мура выбран как наиболее подходящий для данной задачи по следующим причинам: поля ФИО содержат текст на естественном языке с большим алфавитом (кириллица), что обеспечивает большие сдвиги при несовпадении и субсублинейное поведение на практике; искомые фрагменты, как правило, короткие (фамилия или её часть), что дополнительно повышает эффективность. По сравнению с КМП, алгоритм Бойера-Мура проигрывает по гарантированной асимптотике в худшем случае, однако на реальных данных (имена людей, а не искусственно подобранные строки) худший случай крайне маловероятен.
+
 === Симметричный обход дерева
 
 Симметричный обход (in-order traversal) -- это способ обхода двоичного дерева, при котором узлы посещаются в следующем порядке: сначала рекурсивно обходится левое поддерево, затем посещается текущий узел, затем рекурсивно обходится правое поддерево. Для двоичного дерева поиска симметричный обход гарантирует посещение узлов в порядке возрастания ключей.
@@ -268,48 +293,100 @@
 #pagebreak()
 = Описание программы
 
+== Выбор средств разработки
+
+Для реализации курсового проекта выбран язык программирования Kotlin. Данный выбор обусловлен наличием значительного практического опыта разработки на этом языке, в том числе в рамках профессиональной деятельности в качестве Kotlin-разработчика в Яндекс 360. Kotlin обеспечивает null-безопасность на уровне системы типов, что существенно снижает вероятность ошибок при работе с динамическими структурами данных (деревья, связные списки). Лаконичный синтаксис языка (data-классы, sealed-классы, функции-расширения) позволяет сократить объём кода и повысить его читаемость по сравнению с Java.
+
+Для обеспечения платформонезависимости алгоритмов и структур данных использована технология Kotlin Multiplatform (KMP). Она позволяет писать общий код, который компилируется под несколько целевых платформ: JVM, JavaScript и WebAssembly. В данной работе модуль core, содержащий реализации хеш-таблицы, АВЛ-дерева, слоеного списка и алгоритма Бойера-Мура, является полностью платформонезависимым. Благодаря этому модульные тесты выполняются одновременно на трёх платформах (JVM, JS, WASM), что повышает уверенность в корректности реализации.
+
+Для построения пользовательского интерфейса выбран фреймворк Compose Multiplatform, разработанный компанией JetBrains на основе Jetpack Compose от Google. Compose Multiplatform реализует декларативный подход к описанию интерфейса: разработчик описывает, как экран должен выглядеть в зависимости от текущего состояния данных, а фреймворк автоматически перерисовывает только изменившиеся элементы. В сочетании с реактивными потоками данных (StateFlow) это обеспечивает автоматическое обновление интерфейса при любом изменении в структурах данных -- добавлении читателя в хеш-таблицу, вставке книги в АВЛ-дерево или регистрации выдачи в слоеном списке. Фреймворк поддерживает запуск из единой кодовой базы как настольного приложения (JVM), так и веб-приложения (WebAssembly), что избавляет от необходимости реализовывать интерфейс дважды.
+
 == Структура программы
 
-// TODO: расписать лучше структуру (добавить про Clean Arch)
-
-// Описание классов представить в виде таблице
-
-Программа реализована на языке Kotlin с использованием технологии Kotlin Multiplatform и фреймворка Compose Multiplatform. Это позволяет запускать одно и то же приложение как настольное (JVM) и как веб-приложение (WebAssembly).
-
-Проект разделён на два модуля:
-
-- core -- библиотека структур данных и алгоритмов (платформонезависимая);
-- app -- пользовательский интерфейс и слой репозиториев.
-
-Модуль core содержит реализации структур данных и алгоритмов. Модуль app зависит от core и реализует пользовательский интерфейс, репозитории и бизнес-логику. Взаимосвязи между основными компонентами отражены на рисунке @structure.
+Проект разделён на два модуля: core и app. Модуль core является платформонезависимой библиотекой, содержащей доменные модели, структуры данных и алгоритмы. Модуль app зависит от core и реализует слой репозиториев, бизнес-логику (ViewModel) и пользовательский интерфейс (Compose Multiplatform). Архитектура приложения построена по паттерну MVVM (Model--View--ViewModel) с использованием паттерна Repository для абстрагирования доступа к структурам данных. Зависимости направлены строго сверху вниз: UI-экраны обращаются к ViewModel, ViewModel -- к репозиториям, репозитории -- к структурам данных модуля core. Общая схема архитектуры представлена на рисунке @structure.
 
 #figure(
-  image("images/structure.svg", width: 95%),
-  caption: "Структура программы"
+  image("images/structure.png", width: 85%),
+  caption: "Архитектура программы"
 ) <structure>
 
 === Модуль core
 
-// Исходный код модуля представлен в Приложении А
+Модуль core содержит доменные модели предметной области и реализации всех структур данных и алгоритмов, предусмотренных заданием. Исходный код модуля представлен в Приложении А. Модуль не имеет зависимостей от платформы и компилируется под JVM, JavaScript и WebAssembly.
 
-Класс BookAVLTree реализует сбалансированное АВЛ-дерево поиска для хранения книг, упорядоченное по шифру (BookCipher). Поддерживаемые операции: вставка (insert), удаление (delete), поиск по шифру (findByCipher), поиск по фрагменту названия или автора (searchByFragment, searchByAuthorFragment, searchByNameFragment) через симметричный обход с применением алгоритма Бойера-Мура, получение всех книг в отсортированном порядке (toArray).
+Доменные модели описывают основные сущности предметной области. Перечень моделей приведён в таблице @models.
 
-Класс ReaderHashTable реализует хеш-таблицу с открытым хешированием для хранения читателей. Цепочки коллизий хранятся в экземплярах LinearLinkedList. Первичный ключ -- номер читательского билета (ReaderTicket). Хеш-функция: $h(k) = |"hashCode"(k)| mod m$, где $m = 300$. Поддерживаемые операции: добавление (put), удаление (remove), поиск по номеру билета (findByTicket) за $O(1)$ в среднем, поиск по фрагменту ФИО (findByFullName) с применением алгоритма Бойера-Мура.
+#figure(
+  caption: "Доменные модели модуля core",
+  kind: table,
+  long-table(
+    columns: (1fr, 2fr, 2fr),
+    align: (left, left, left),
+    table.header([Класс], [Назначение], [Ключевые поля]),
 
-Класс LoanSkipList реализует детерминированный слоеный список для хранения записей о выдачах книг. Список отсортирован по шифру книги методом сортировки включением. Каждый узел дополнительно хранит два указателя: nextBookGroup (первый узел следующей группы с другим шифром) и nextReaderRecord (первый узел следующей группы с другим номером билета). Поддерживаемые операции: вставка (insert), удаление (remove), обновление (update), поиск по шифру книги (findByBookCipher), поиск по номеру читательского билета (findByReaderTicket), поиск активных выдач.
+    [Book], [Сущность «книга». Реализует Comparable для сортировки по шифру.], [cipher, name, authors, publishing, yearOfPublishing, totalCopies, availableCopies],
+    [BookCipher], [Шифр книги формата «NNN.MMM». Валидация формата при создании.], [section, number],
+    [Reader], [Сущность «читатель». Валидация года рождения.], [readerTicket, fullName, yearOfBirthday, address, placeOfWork],
+    [ReaderTicket], [Номер читательского билета формата «ANNNN-YY». Содержит собственную хеш-функцию.], [accessType, number, year],
+    [Loan], [Запись о выдаче книги. Реализует Comparable для сортировки по шифру.], [bookCipher, readerTicket, issueDate, returnDate],
+  )
+) <models>
 
-Класс BoyerMoore реализует поиск подстроки в строке по алгоритму Бойера-Мура с правилом плохого символа. Поиск выполняется без учёта регистра. Метод contains используется в ReaderHashTable и BookAVLTree для текстового поиска по фрагменту.
+Структуры данных и алгоритмы реализуют хранение и обработку доменных моделей. Перечень классов приведён в таблице @structures.
+
+#figure(
+  caption: "Структуры данных и алгоритмы модуля core",
+  kind: table,
+  long-table(
+    columns: (1.2fr, 1.5fr, 1fr, 2.5fr),
+    align: (left, left, left, left),
+    table.header([Класс], [Структура], [Ключ], [Основные операции]),
+
+    [BookAVLTree], [АВЛ-дерево поиска], [BookCipher], [insert, delete, findByCipher, searchByFragment (симметричный обход + Бойера-Мура), toArray],
+    [ReaderHashTable], [Хеш-таблица с открытым хешированием ($m = 300$)], [ReaderTicket], [put, remove, findByTicket ($O(1)$), findByFullName (Бойера-Мура), toArray],
+    [LoanSkipList], [Слоеный список (указатели nextBookGroup, nextReaderRecord)], [BookCipher], [insert (сортировка включением), remove, findByBookCipher, findByReaderTicket, findActiveLoan],
+    [BoyerMoore], [Алгоритм поиска подстроки (правило плохого символа)], [---], [search, contains, searchAll (без учёта регистра)],
+  )
+) <structures>
 
 === Модуль app
 
-// Исходный код модуля представлен в Приложении Б
+Модуль app реализует пользовательский интерфейс и бизнес-логику приложения. Исходный код модуля представлен в Приложении Б. Архитектура следует паттерну MVVM: слой репозиториев оборачивает структуры данных из core и предоставляет реактивные потоки (StateFlow), ViewModel агрегирует данные и содержит логику экранов, а UI-компоненты (Compose) подписываются на состояние ViewModel.
 
+Репозитории служат мостом между структурами данных модуля core и реактивным интерфейсом. Перечень репозиториев приведён в таблице @repositories.
 
-Репозитории AVLBooksRepository, MapReadersRepository и SkipListLoansRepository оборачивают структуры данных из модуля core и предоставляют реактивные потоки данных (MutableStateFlow), обеспечивающие автоматическое обновление интерфейса при изменении данных.
+#figure(
+  caption: "Репозитории модуля app",
+  kind: table,
+  long-table(
+    columns: (1.5fr, 1.5fr, 1.5fr),
+    align: (left, left, left),
+    table.header([Класс], [Обёртка над], [Реактивный поток]),
 
-Пользовательский интерфейс построен по архитектуре MVVM: каждому экрану соответствует ViewModel (BooksViewModel, ReadersViewModel, LoansViewModel, SettingsViewModel), которая содержит бизнес-логику и агрегирует данные из репозиториев.
+    [AVLBooksRepository], [BookAVLTree], [Flow\<Array\<Book\>\>],
+    [MapReadersRepository], [ReaderHashTable], [Flow\<Array\<Reader\>\>],
+    [SkipListLoansRepository], [LoanSkipList], [Flow\<Array\<Loan\>\>],
+  )
+) <repositories>
 
-Навигация реализована через NavigationSuiteScaffold с четырьмя вкладками: Читатели, Книги, Выдачи, Настройки.
+Каждому экрану приложения соответствует отдельный ViewModel, инкапсулирующий бизнес-логику и взаимодействие с репозиториями. Перечень ViewModel приведён в таблице @viewmodels.
+
+#figure(
+  caption: "ViewModel модуля app",
+  kind: table,
+  long-table(
+    columns: (1.5fr, 1fr, 2.5fr),
+    align: (left, left, left),
+    table.header([Класс], [Экран], [Функции]),
+
+    [BooksViewModel], [Книги], [Просмотр, поиск по шифру / названию / автору, добавление, редактирование, удаление],
+    [ReadersViewModel], [Читатели], [Просмотр, поиск по билету / ФИО, добавление, редактирование, удаление],
+    [LoansViewModel], [Выдачи], [Выдача и приём книг, автодополнение по читателю и книге],
+    [SettingsViewModel], [Настройки], [Генерация тестовых данных, очистка данных],
+  )
+) <viewmodels>
+
+Навигация реализована через компонент NavigationSuiteScaffold, который автоматически адаптирует расположение панели навигации в зависимости от размера окна: боковая панель на настольном компьютере и нижняя панель в браузере. Приложение содержит четыре вкладки: Читатели, Книги, Выдачи и Настройки.
 
 == Руководство пользователя
 
@@ -428,52 +505,106 @@
 #pagebreak()
 = Тестирование
 
-// Сделай описание тестов сводно (возможно в виде таблице)
-// Написать что исходный текст тестов представлен в приложении В
+Для проверки корректности реализованных структур данных и алгоритмов разработан набор модульных тестов на платформе Kotlin Test. Тесты расположены в модуле core и выполняются на трёх платформах: JVM, JS и WebAssembly. Всего реализовано 17 тестов, распределённых по пяти тестовым классам. Все тесты пройдены успешно. Исходный код тестов представлен в Приложении В.
 
+Сводная информация о тестовых классах приведена в таблице @test_summary_table.
 
-Для проверки корректности реализованных структур данных и алгоритмов разработан набор модульных тестов на платформе Kotlin Test. Тесты расположены в модуле core и выполняются на трёх платформах: JVM, JS и WebAssembly. Всего реализовано 17 тестов, распределённых по пяти тестовым классам. Все тесты пройдены успешно.
+#figure(
+  caption: "Сводная таблица модульных тестов",
+  kind: table,
+  long-table(
+    columns: (2fr, 0.7fr, 3fr),
+    align: (left, left, left),
+    table.header([Тестовый класс], [Кол-во], [Что проверяется]),
+
+    [BookAVLTreeTest], [2], [Вставка узлов, структура дерева после балансировки, высота и баланс],
+    [ReaderHashTableTest], [5], [Добавление, поиск, удаление, обработка коллизий, оператор contains, toArray],
+    [LoanSkipListTest], [5], [Сортировка включением, указатели nextBookGroup и nextReaderRecord, поиск по шифру и билету],
+    [BookCipherTest], [2], [Валидация корректного и некорректного формата шифра «NNN.MMM»],
+    [ReaderTicketTest], [3], [Валидация формата билета «ANNNN-YY», типы доступа, обработка ошибок],
+  )
+) <test_summary_table>
 
 Сводный отчёт о результатах тестирования представлен на рисунке @test_summary.
 
 #figure(
-  image("images/test_summary.png", width: 95%),
+  image("images/test_summary.png", width: 80%),
   caption: "Сводный отчёт о тестировании"
 ) <test_summary>
 
 == Тестирование BookAVLTree
 
-Класс BookAVLTreeTest содержит два теста, проверяющих корректность работы АВЛ-дерева.
+Класс BookAVLTreeTest содержит два теста, проверяющих корректность работы АВЛ-дерева. Перечень тестов приведён в таблице @test_avltree_table.
 
-Тест rootAVLTree проверяет базовую вставку: после добавления трёх книг корень дерева должен быть равен первой вставленной книге (шифр 100.001), правый потомок -- второй (100.002), левый -- третьей (100.000).
+#figure(
+  caption: "Тесты класса BookAVLTreeTest",
+  kind: table,
+  long-table(
+    columns: (1.2fr, 3fr),
+    align: (left, left),
+    table.header([Тест], [Описание]),
 
-Тест balanceAVLTree вставляет восемь книг и проверяет структуру дерева после балансировки: корнем должна стать книга с шифром 200.001, высота дерева -- 4, балансировочные коэффициенты всех узлов -- в допустимом диапазоне [-1; 1].
+    [rootAVLTree], [Вставка трёх книг. Проверяется, что корень равен первой книге (100.001), правый потомок -- второй (100.002), левый -- третьей (100.000).],
+    [balanceAVLTree], [Вставка восьми книг. Проверяется структура после балансировки: корень -- 200.001, высота -- 4, баланс всех узлов в диапазоне \[--1; 1\].],
+  )
+) <test_avltree_table>
 
 Результаты тестирования BookAVLTree приведены на рисунке @test_avltree.
 
 #figure(
-  image("images/test_avltree.png", width: 95%),
+  image("images/test_avltree.png"),
   caption: "Результаты тестирования BookAVLTree"
 ) <test_avltree>
 
 == Тестирование ReaderHashTable
 
-Класс ReaderHashTableTest содержит пять тестов, проверяющих операции хеш-таблицы читателей.
+Класс ReaderHashTableTest содержит пять тестов, проверяющих операции хеш-таблицы читателей. Перечень тестов приведён в таблице @test_hashtable_table.
 
-Тест addValuesToHashTable проверяет добавление трёх читателей и их поиск по номеру билета. Тест collisionHandling аналогичен, но таблица создаётся с ёмкостью 2, что принудительно вызывает коллизии и проверяет корректность цепочек. Тест removeValueFromHashTable добавляет читателей, удаляет одного по номеру билета и проверяет, что поиск возвращает null. Тест containsOperator проверяет оператор in: для существующего билета должен вернуть true, для несуществующего -- false. Тест toListTest проверяет, что метод toArray возвращает список с количеством элементов, равным количеству добавленных читателей.
+#pagebreak()
+#figure(
+  caption: "Тесты класса ReaderHashTableTest",
+  kind: table,
+  long-table(
+    columns: (1.5fr, 3fr),
+    align: (left, left),
+    table.header([Тест], [Описание]),
+
+    [addValuesToHashTable], [Добавление трёх читателей и поиск каждого по номеру билета.],
+    [collisionHandling], [Таблица с ёмкостью 2 -- принудительные коллизии. Проверяется корректность цепочек.],
+    [removeValueFromHashTable], [Добавление читателей, удаление одного по номеру билета. Поиск должен вернуть null.],
+    [containsOperator], [Оператор `in`: true для существующего билета, false для несуществующего.],
+    [toListTest], [Метод toArray возвращает список с количеством элементов, равным числу добавленных читателей.],
+  )
+) <test_hashtable_table>
 
 Результаты тестирования ReaderHashTable приведены на рисунке @test_hashtable.
 
+
 #figure(
-  image("images/test_hashtable.png", width: 95%),
+  image("images/test_hashtable.png"),
   caption: "Результаты тестирования ReaderHashTable"
 ) <test_hashtable>
 
 == Тестирование LoanSkipList
 
-Класс LoanSkipListTest содержит пять тестов, проверяющих слоёный список выдач.
+Класс LoanSkipListTest содержит пять тестов, проверяющих слоёный список выдач. Перечень тестов приведён в таблице @test_skiplist_table.
 
-Тест sortedTest вставляет три записи и проверяет, что они упорядочены по шифру книги методом вставки. Тест bookGroupingTest проверяет правильность заполнения указателей nextBookGroup: обход по ним должен перечислить группы в порядке возрастания шифра. Тест readerGroupingTest аналогичен для указателей nextReaderRecord. Тесты findByBookCipherTest и findByReaderTicketTest проверяют выборку записей по шифру книги и по номеру читательского билета соответственно.
+#pagebreak()
+#figure(
+  caption: "Тесты класса LoanSkipListTest",
+  kind: table,
+  long-table(
+    columns: (1.5fr, 3fr),
+    align: (left, left),
+    table.header([Тест], [Описание]),
+
+    [sortedTest], [Вставка трёх записей. Проверяется упорядоченность по шифру книги методом включения.],
+    [bookGroupingTest], [Проверка указателей nextBookGroup: обход перечисляет группы в порядке возрастания шифра.],
+    [readerGroupingTest], [Проверка указателей nextReaderRecord: обход перечисляет группы по номерам билетов.],
+    [findByBookCipherTest], [Выборка записей по шифру книги -- возвращаются только записи с заданным шифром.],
+    [findByReaderTicketTest], [Выборка записей по номеру читательского билета -- возвращаются только записи с заданным билетом.],
+  )
+) <test_skiplist_table>
 
 Результаты тестирования LoanSkipList приведены на рисунке @test_skiplist.
 
@@ -484,19 +615,34 @@
 
 == Тестирование вспомогательных классов
 
-Класс BookCipherTest содержит два теста. Тест validCipher проверяет, что шифр вида «NNN.NNN» корректно разбирается на секцию и номер. Тест invalidCipher проверяет, что при создании шифра с некорректным форматом (неверное количество цифр, буквы вместо цифр) выбрасывается исключение.
+Класс BookCipherTest содержит два теста, проверяющих валидацию шифра книги. Класс ReaderTicketTest содержит три теста, проверяющих валидацию номера читательского билета. Перечень тестов приведён в таблице @test_aux_table.
 
-Класс ReaderTicketTest содержит три теста. Тест correctlyReaderTicket проверяет корректный разбор билета «А1234-20»: тип доступа SUBSCRIPTION, номер 1234, год 2020. Тест incorrectlyReaderTicket проверяет, что пять некорректных форматов вызывают исключение. Тест accessTypeFromChar проверяет соответствие символов А, Ч, В типам доступа.
+#pagebreak()
+#figure(
+  caption: "Тесты классов BookCipherTest и ReaderTicketTest",
+  kind: table,
+  long-table(
+    columns: (2fr, 2fr, 3fr),
+    align: (left, left, left),
+    table.header([Класс], [Тест], [Описание]),
+
+    [BookCipherTest], [validCipher], [Шифр «NNN.NNN» корректно разбирается на секцию и номер.],
+    [BookCipherTest], [invalidCipher], [Некорректный формат (неверное количество цифр, буквы) вызывает исключение.],
+    [ReaderTicketTest], [correctlyReaderTicket], [Билет «А1234-20» разбирается: тип SUBSCRIPTION, номер 1234, год 2020.],
+    [ReaderTicketTest], [incorrectlyReaderTicket], [Пять некорректных форматов вызывают исключение.],
+    [ReaderTicketTest], [accessTypeFromChar], [Символы А, Ч, В корректно соответствуют типам доступа.],
+  )
+) <test_aux_table>
 
 Результаты тестирования приведены на рисунках @test_bookcipher и @test_readerticket.
 
 #figure(
-  image("images/test_bookcipher.png", width: 95%),
+  image("images/test_bookcipher.png",),
   caption: "Результаты тестирования BookCipherTest"
 ) <test_bookcipher>
 
 #figure(
-  image("images/test_readerticket.png", width: 95%),
+  image("images/test_readerticket.png"),
   caption: "Результаты тестирования ReaderTicketTest"
 ) <test_readerticket>
 
@@ -519,6 +665,28 @@
 #ch("СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ")
 #v(0.8em)
 
+1. Кнут Д. Э. Искусство программирования. Т. 3: Сортировка и поиск. 2-е изд. М.: Вильямс, 2007. 832 с.
+
+2. Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ. 3-е изд. М.: Вильямс, 2013. 1328 с.
+
+3. Ахо А., Хопкрофт Дж., Ульман Дж. Структуры данных и алгоритмы. М.: Вильямс, 2003. 384 с.
+
+4. Седжвик Р. Алгоритмы на Java. 4-е изд. М.: Вильямс, 2013. 848 с.
+
+5. Вирт Н. Алгоритмы и структуры данных. Новая версия для Оберона. М.: ДМК Пресс, 2010. 272 с.
+
+6. Адельсон-Вельский Г. М., Ландис Е. М. Один алгоритм организации информации // Доклады АН СССР. 1962. Т. 146, № 2. С. 263--266.
+
+7. Boyer R. S., Moore J. S. A Fast String Searching Algorithm // Communications of the ACM. 1977. Vol. 20, No. 10. P. 762--772.
+
+8. Pugh W. Skip Lists: A Probabilistic Alternative to Balanced Trees // Communications of the ACM. 1990. Vol. 33, No. 6. P. 668--676.
+
+9. Kotlin Documentation [Электронный ресурс]. URL: https://kotlinlang.org/docs/home.html (дата обращения: 15.03.2026).
+
+10. Compose Multiplatform Documentation [Электронный ресурс]. URL: https://www.jetbrains.com/compose-multiplatform/ (дата обращения: 15.03.2026).
+
+11. Kotlin Multiplatform Documentation [Электронный ресурс]. URL: https://kotlinlang.org/docs/multiplatform.html (дата обращения: 15.03.2026).
+
 #pagebreak()
 #{
   show heading: none
@@ -528,7 +696,40 @@
 #align([*ПРИЛОЖЕНИЕ A. \ Код созданных структур данных*], center)
 #v(0.8em)
 
+Book.kt
+#raw(read("../core/src/commonMain/kotlin/book/models/Book.kt"), lang: "kotlin", block: true)
 
+BookCipher.kt
+#raw(read("../core/src/commonMain/kotlin/book/models/BookCipher.kt"), lang: "kotlin", block: true)
+
+BookAVLTree.kt
+#raw(read("../core/src/commonMain/kotlin/book/BookAVLTree.kt"), lang: "kotlin", block: true)
+
+Reader.kt
+#raw(read("../core/src/commonMain/kotlin/reader/models/Reader.kt"), lang: "kotlin", block: true)
+
+ReaderTicket.kt
+#raw(read("../core/src/commonMain/kotlin/reader/models/ReaderTicket.kt"), lang: "kotlin", block: true)
+
+LinearLinkedList.kt
+#raw(read("../core/src/commonMain/kotlin/reader/LinearLinkedList.kt"), lang: "kotlin", block: true)
+
+ReaderHashTable.kt
+#raw(read("../core/src/commonMain/kotlin/reader/ReaderHashTable.kt"), lang: "kotlin", block: true)
+
+Loan.kt
+#raw(read("../core/src/commonMain/kotlin/loan/models/Loan.kt"), lang: "kotlin", block: true)
+
+LoanSkipList.kt
+#raw(read("../core/src/commonMain/kotlin/loan/LoanSkipList.kt"), lang: "kotlin", block: true)
+
+BoyerMoore.kt
+#raw(read("../core/src/commonMain/kotlin/utils/BoyerMoore.kt"), lang: "kotlin", block: true)
+
+currentYear.kt
+#raw(read("../core/src/commonMain/kotlin/utils/currentYear.kt"), lang: "kotlin", block: true)
+
+#pagebreak()
 #{
   show heading: none
   align(heading([ПРИЛОЖЕНИЕ Б. Код программы], numbering: none), center)
@@ -537,10 +738,107 @@
 #align([*ПРИЛОЖЕНИЕ Б. \ Код программы*], center)
 #v(0.8em)
 
+App.kt
+#raw(read("../app/src/commonMain/kotlin/App.kt"), lang: "kotlin", block: true)
+
+main.kt (JVM)
+#raw(read("../app/src/jvmMain/kotlin/main.kt"), lang: "kotlin", block: true)
+
+main.kt (WasmJS)
+#raw(read("../app/src/wasmJsMain/kotlin/main.kt"), lang: "kotlin", block: true)
+
+BooksRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/books/BooksRepository.kt"), lang: "kotlin", block: true)
+
+AVLBooksRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/books/AVLBooksRepository.kt"), lang: "kotlin", block: true)
+
+BooksRepositorySingleton.kt
+#raw(read("../app/src/commonMain/kotlin/data/books/BooksRepositorySingleton.kt"), lang: "kotlin", block: true)
+
+ReadersRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/readers/ReadersRepository.kt"), lang: "kotlin", block: true)
+
+MapReadersRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/readers/MapReadersRepository.kt"), lang: "kotlin", block: true)
+
+ReadersRepositorySingleton.kt
+#raw(read("../app/src/commonMain/kotlin/data/readers/ReadersRepositorySingleton.kt"), lang: "kotlin", block: true)
+
+LoansRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/loans/LoansRepository.kt"), lang: "kotlin", block: true)
+
+SkipListLoansRepository.kt
+#raw(read("../app/src/commonMain/kotlin/data/loans/SkipListLoansRepository.kt"), lang: "kotlin", block: true)
+
+LoansRepositorySingleton.kt
+#raw(read("../app/src/commonMain/kotlin/data/loans/LoansRepositorySingleton.kt"), lang: "kotlin", block: true)
+
+MainNav.kt
+#raw(read("../app/src/commonMain/kotlin/ui/nav/MainNav.kt"), lang: "kotlin", block: true)
+
+BooksScreen.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/books/BooksScreen.kt"), lang: "kotlin", block: true)
+
+BooksViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/books/BooksViewModel.kt"), lang: "kotlin", block: true)
+
+UpsertBook.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/books/upsert/UpsertBook.kt"), lang: "kotlin", block: true)
+
+UpsertBookViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/books/upsert/UpsertBookViewModel.kt"), lang: "kotlin", block: true)
+
+ReadersScreen.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/readers/ReadersScreen.kt"), lang: "kotlin", block: true)
+
+ReadersViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/readers/ReadersViewModel.kt"), lang: "kotlin", block: true)
+
+UpsertReader.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/readers/upsert/UpsertReader.kt"), lang: "kotlin", block: true)
+
+UpsertReaderViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/readers/upsert/UpsertReaderViewModel.kt"), lang: "kotlin", block: true)
+
+LoansScreen.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/loans/LoansScreen.kt"), lang: "kotlin", block: true)
+
+LoansViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/loans/LoansViewModel.kt"), lang: "kotlin", block: true)
+
+SettingsScreen.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/settings/SettingsScreen.kt"), lang: "kotlin", block: true)
+
+SettingsViewModel.kt
+#raw(read("../app/src/commonMain/kotlin/ui/screen/settings/SettingsViewModel.kt"), lang: "kotlin", block: true)
+
+AppTheme.kt
+#raw(read("../app/src/commonMain/kotlin/ui/theme/AppTheme.kt"), lang: "kotlin", block: true)
+
+Color.kt
+#raw(read("../app/src/commonMain/kotlin/ui/theme/Color.kt"), lang: "kotlin", block: true)
+
+#pagebreak()
 #{
   show heading: none
   align(heading([ПРИЛОЖЕНИЕ В. Код Юнит-тестов], numbering: none), center)
 }
 
-#align([*ПРИЛОЖЕНИЕ В. Код Юнит-тестов*], center)
+#align([*ПРИЛОЖЕНИЕ В. \ Код Юнит-тестов*], center)
 #v(0.8em)
+
+BookAVLTreeTest.kt
+#raw(read("../core/src/commonTest/kotlin/BookAVLTreeTest.kt"), lang: "kotlin", block: true)
+
+ReaderHashTableTest.kt
+#raw(read("../core/src/commonTest/kotlin/ReaderHashTableTest.kt"), lang: "kotlin", block: true)
+
+LoanSkipListTest.kt
+#raw(read("../core/src/commonTest/kotlin/LoanSkipListTest.kt"), lang: "kotlin", block: true)
+
+BookCipherTest.kt
+#raw(read("../core/src/commonTest/kotlin/BookCipherTest.kt"), lang: "kotlin", block: true)
+
+ReaderTicketTest.kt
+#raw(read("../core/src/commonTest/kotlin/ReaderTicketTest.kt"), lang: "kotlin", block: true)
