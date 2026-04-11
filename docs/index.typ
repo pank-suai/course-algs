@@ -353,7 +353,7 @@
   caption: "Структуры данных и алгоритмы модуля core",
   kind: table,
   long-table(
-    columns: (1.2fr, 1.5fr, 1fr, 2.5fr),
+    columns: (1.4fr, 1.5fr, 1.1fr, 2.5fr),
     align: (left, left, left, left),
     table.header([Класс], [Структура], [Ключ], [Основные операции]),
 
